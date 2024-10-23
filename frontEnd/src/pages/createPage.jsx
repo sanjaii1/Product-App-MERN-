@@ -5,21 +5,53 @@ import {
   Heading,
   Input,
   useColorModeValue,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useProductStore } from "../store/product";
 
 const CreatePage = () => {
+  const { createProduct } = useProductStore();
+  const toast = useToast();
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
     image: "",
   });
 
-  const handleAddProduct =() => {
-    console.log(newProduct)
-  }
+  const handleAddProduct = async () => {
+    const price = Number(newProduct.price);
 
+    if (isNaN(price)) {
+      toast({
+        title: "Error",
+        description: "Price must be a valid number.",
+        status: "error",
+        isClosable: true,
+      });
+      return;
+    }
+
+    const { success, message } = await createProduct(newProduct);
+    if (!success) {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: message,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      setNewProduct({ name: "", price: "", image: "" });
+    }
+  };
 
   return (
     <Container maxW={"container.sm"}>
