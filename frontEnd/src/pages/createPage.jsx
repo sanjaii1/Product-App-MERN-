@@ -20,6 +20,8 @@ const CreatePage = () => {
     image: "",
   });
 
+  console.log(newProduct, "ajhsjkhsajkhjk");
+
   const handleAddProduct = async () => {
     const price = Number(newProduct.price);
 

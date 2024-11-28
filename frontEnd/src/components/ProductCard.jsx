@@ -6,6 +6,7 @@ import {
   IconButton,
   useColorModeValue,
   Image,
+  Text
 } from "@chakra-ui/react";
 import React from "react";
 const ProductCard = ({ product }) => {
@@ -25,7 +26,7 @@ const ProductCard = ({ product }) => {
     >
       <Image
         src={product.image}
-        alt={product.image}
+        alt={product.name}
         h={48}
         w="full"
         objectFit="cover"
@@ -34,6 +35,7 @@ const ProductCard = ({ product }) => {
         <Heading as="h3" size="md" mb={2} color={textColor}>
           {product.name}
         </Heading>
+        <Text fontWeight='bold' fontSize='xl' color={textColor} mb={4}>${product.price}</Text>
         <HStack spacing={2}>
           <IconButton icon={<EditIcon />} colorScheme="blue" />
           <IconButton icon={<DeleteIcon />} colorScheme="red" />
@@ -43,4 +45,4 @@ const ProductCard = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default ProductCard; 
