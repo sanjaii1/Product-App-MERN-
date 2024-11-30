@@ -8,14 +8,27 @@ import {
   Image,
   Text,
   useToast,
+  Modal,
+  useDisclosure,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  VStack,
+  Input,
+  Button,
+  ModalFooter,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useProductStore } from "../store/product";
 const ProductCard = ({ product }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const textColor = useColorModeValue("gray.600", "gray.200");
   const bg = useColorModeValue("white", "gray.800");
   const { deleteProduct } = useProductStore();
   const toast = useToast();
+  const [updateProduct, setUpdateProduct]= useState(product)
   const handleDeleteProduct = async (pid) => {
     const { success, message } = await deleteProduct(pid);
     if (!success) {
@@ -63,7 +76,7 @@ const ProductCard = ({ product }) => {
           ${product.price}
         </Text>
         <HStack spacing={2}>
-          <IconButton icon={<EditIcon />} colorScheme="blue" />
+          <IconButton icon={<EditIcon />} onClick={onOpen} colorScheme="blue" />
           <IconButton
             icon={<DeleteIcon />}
             onClick={() => handleDeleteProduct(product._id)}
@@ -71,6 +84,29 @@ const ProductCard = ({ product }) => {
           />
         </HStack>
       </Box>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Update Product</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing={4}>
+              <Input placeholder="Product Name" name="name"  value={updateProduct.name}/>
+              <Input placeholder="Price" name="price" value={updateProduct.price} />{" "}
+              <Input placeholder="Image URL" name="image"  value={updateProduct.image } />
+            </VStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={''}>
+              Update
+            </Button>
+            <Button variant={"ghost"} onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
