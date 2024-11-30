@@ -52,9 +52,27 @@ const ProductCard = ({ product }) => {
   };
 
   const handleUpdateProduct = async (pid, updatedProduct) => {
-    await updateProduct(pid, updateProduct);
-    onClose();
+    const { success, message } = await updateProduct(pid, updatedProduct);
+    if (!success) {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: message,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      onClose();
+    }
   };
+
   return (
     <Box
       shadow="lg"
@@ -101,25 +119,34 @@ const ProductCard = ({ product }) => {
               <Input
                 placeholder="Product Name"
                 name="name"
-                value={updatedProduct.name}
+                value={updatedProduct.name || ""}
                 onChange={(e) =>
-                  setUpdateProduct({ ...updatedProduct, name: e.target.value })
+                  setUpdateProduct((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
                 }
               />
               <Input
                 placeholder="Price"
                 name="price"
-                value={updatedProduct.price}
+                value={updatedProduct.price || ""}
                 onChange={(e) =>
-                  setUpdateProduct({ ...updatedProduct, price: e.target.value })
+                  setUpdateProduct((prev) => ({
+                    ...prev,
+                    price: e.target.value,
+                  }))
                 }
               />{" "}
               <Input
                 placeholder="Image URL"
                 name="image"
-                value={updatedProduct.image}
+                value={updatedProduct.image || ""}
                 onChange={(e) =>
-                  setUpdateProduct({ ...updatedProduct, image: e.target.value })
+                  setUpdateProduct((prev) => ({
+                    ...prev,
+                    image: e.target.value,
+                  }))
                 }
               />
             </VStack>
